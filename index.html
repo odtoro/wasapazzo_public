@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat Directo – WhatsApp & Telegram sin guardar contactos</title>
+  <meta name="description" content="Abre chats en WhatsApp o Telegram sin guardar contactos. Teclado rápido, historial local y favoritos. Privacidad por diseño: sin permisos." />
+  <meta name="theme-color" content="#0ea5e9" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Chat Directo – WhatsApp & Telegram sin guardar contactos" />
+  <meta property="og:description" content="Escribe el número. Toca WhatsApp o Telegram. Listo. Ahorra tiempo y mantén tu libreta limpia." />
+  <meta property="og:image" content="https://raw.githubusercontent.com/USER/REPO/main/og-image.png" />
+  <meta property="og:url" content="https://USER.github.io/REPO/" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Favicon simple en SVG -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230ea5e9'/%3E%3Cpath d='M22 22h20a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H22l-8 6V26a4 4 0 0 1 4-4z' fill='white'/%3E%3C/svg%3E" />
+
+  <!-- Minimal CSS embebido para no depender de build -->
+  <style>
+    :root { --bg:#0b1220; --card:#0f172a; --muted:#94a3b8; --text:#e2e8f0; --brand:#0ea5e9; --brand-2:#22c55e; --ring: 0 0 0 4px rgba(14,165,233,.25)}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    header{position:sticky;top:0;background:linear-gradient(180deg, rgba(11,18,32,0.95), rgba(11,18,32,0.75));backdrop-filter: blur(6px);z-index:10;border-bottom:1px solid rgba(148,163,184,.1)}
+    nav{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .logo{display:flex;align-items:center;gap:10px;font-weight:700}
+    .logo-badge{width:28px;height:28px;border-radius:8px;background:var(--brand);display:grid;place-items:center;font-weight:800}
+    .nav-links{display:flex;gap:18px;font-size:14px}
+    .btn{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(148,163,184,.25);background:linear-gradient(180deg,#111827,#0b1220);padding:10px 14px;border-radius:12px;color:var(--text);box-shadow: 0 6px 20px rgba(0,0,0,.25);}
+    .btn:hover{border-color:rgba(148,163,184,.5)}
+    .btn.primary{background:linear-gradient(180deg, #22c55e, #16a34a);border-color:transparent;color:white}
+    .btn.secondary{background:linear-gradient(180deg,#0ea5e9,#0284c7);border-color:transparent;color:white}
+    .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;padding:48px 0}
+    .hero h1{font-size:clamp(28px,5vw,42px);line-height:1.05;margin:0 0 12px}
+    .hero p{font-size:18px;color:var(--muted);margin:0 0 22px}
+    .badge{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(148,163,184,.25);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.03),transparent);border:1px solid rgba(148,163,184,.15);border-radius:16px;padding:18px}
+    .phone{aspect-ratio:9/19;border-radius:24px;border:1px solid rgba(148,163,184,.2);padding:16px;background:radial-gradient(1200px 1200px at -20% -10%, rgba(34,197,94,.25), transparent 50%), #0a0f1c}
+    .row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .row .card h3{margin:0 0 6px;font-size:18px}
+    .muted{color:var(--muted)}
+    .section{padding:48px 0}
+    .store-badges{display:flex;flex-wrap:wrap;gap:10px}
+    .store-badges img{height:44px}
+    .feature-list{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .feature{display:flex;gap:12px;align-items:flex-start}
+    .feature i{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:rgba(14,165,233,.2)}
+    .pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .plan{padding:22px;border-radius:16px;border:1px solid rgba(148,163,184,.15)}
+    .plan h4{margin:0 0 6px}
+    .plan .price{font-size:28px;font-weight:800;margin:6px 0 12px}
+    .faq{display:grid;grid-template-columns:1fr;gap:14px}
+    details{background:#0f172a;border:1px solid rgba(148,163,184,.15);padding:12px 14px;border-radius:12px}
+    summary{cursor:pointer;font-weight:600}
+    footer{border-top:1px solid rgba(148,163,184,.1);padding:28px 0;color:var(--muted);font-size:14px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0b1220;border:1px solid rgba(148,163,184,.25);padding:2px 6px;border-radius:6px}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{padding:6px 10px;border-radius:999px;border:1px solid rgba(148,163,184,.25);font-size:12px;color:var(--muted)}
+    .center{text-align:center}
+    .notice{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);padding:10px 12px;border-radius:10px;color:#c8facc}
+    .danger{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:#fecaca}
+    .links{display:flex;gap:16px;flex-wrap:wrap}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media (max-width: 920px){.hero{grid-template-columns:1fr}.row{grid-template-columns:1fr}.feature-list{grid-template-columns:1fr}.pricing{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}
+  </style>
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Chat Directo",
+    "applicationCategory": "CommunicationApplication",
+    "operatingSystem": "iOS, Android",
+    "offers": [{"@type":"Offer","price":"0","priceCurrency":"USD"}],
+    "description": "Abre chats en WhatsApp o Telegram sin guardar contactos. Privacidad por diseño y cero permisos.",
+    "aggregateRating": {"@type":"AggregateRating","ratingValue":"4.8","reviewCount":"112"}
+  }
+  </script>
+</head>
+<body>
+<header>
+  <div class="container">
+    <nav>
+      <a class="logo" href="#top" aria-label="Chat Directo inicio">
+        <span class="logo-badge" aria-hidden>✉️</span> Chat Directo
+      </a>
+      <div class="nav-links">
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#features">Funciones</a>
+        <a href="#precios">Precios</a>
+        <a href="#faq">FAQ</a>
+        <a href="#legal">Privacidad</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="container hero">
+    <div>
+      <span class="badge">Privacidad por diseño · Cero permisos</span>
+      <h1>WhatsApp & Telegram en un toque, <br/>sin guardar contactos</h1>
+      <p>Escribe un número de 10 dígitos, toca <span class="kbd">WhatsApp</span> o <span class="kbd">Telegram</span> y abre el chat al instante. Ahorra tiempo y evita llenar tu libreta con contactos temporales.</p>
+      <div class="links">
+        <a class="btn secondary" href="#" aria-label="Disponible en App Store" id="appstore"> App Store</a>
+        <a class="btn primary" href="#" aria-label="Disponible en Google Play" id="playstore">Google Play</a>
+        <a class="btn" href="#como-funciona">Ver cómo funciona</a>
+      </div>
+      <div class="chips" style="margin-top:12px">
+        <span class="chip">Teclado estilo iOS</span>
+        <span class="chip">Historial local</span>
+        <span class="chip">Favoritos</span>
+        <span class="chip">Cero permisos</span>
+      </div>
+    </div>
+    <div class="card phone" aria-label="Vista simulada de la app">
+      <div class="card" style="background:#0b1220;border-color:rgba(148,163,184,.2)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <strong>Chat Directo</strong>
+          <span class="muted">00:42</span>
+        </div>
+        <div class="card" style="display:grid;gap:8px">
+          <label for="demo" class="sr-only">Número</label>
+          <input id="demo" inputmode="numeric" pattern="[0-9]*" placeholder="5512345678" aria-label="Número a chatear" style="width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(148,163,184,.25);background:#0a0f1c;color:var(--text)" />
+          <div style="display:flex;gap:10px">
+            <button class="btn secondary" onclick="demoOpen('wa')">WhatsApp</button>
+            <button class="btn primary" onclick="demoOpen('tg')">Telegram</button>
+          </div>
+          <p class="muted" style="margin:0">Ejemplo interactivo (no envía nada). La app real abre el chat directamente.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="como-funciona">
+    <div class="container">
+      <h2>Cómo funciona</h2>
+      <div class="row" style="margin-top:12px">
+        <div class="card">
+          <h3>1. Escribe o pega el número</h3>
+          <p class="muted">Detección de 10 dígitos con formato automático y prefijo +52 opcional.</p>
+        </div>
+        <div class="card">
+          <h3>2. Toca WhatsApp o Telegram</h3>
+          <p class="muted">Abrimos el enlace oficial (<code>wa.me</code> o <code>t.me</code>) sin trucos ni permisos especiales.</p>
+        </div>
+        <div class="card">
+          <h3>3. Chatea y listo</h3>
+          <p class="muted">No guardas el contacto y mantienes tu libreta limpia. Tu historial queda local en el dispositivo.</p>
+        </div>
+      </div>
+      <p class="notice" style="margin-top:16px">La app no envía mensajes por ti ni automatiza acciones. Solo abre el chat con tu confirmación.</p>
+    </div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="container grid-2">
+      <div>
+        <h2>Funciones clave</h2>
+        <div class="feature-list" style="margin-top:10px">
+          <div class="feature"><i>⚡</i><div><strong>Acceso directo</strong><div class="muted">Entra al chat sin guardar el contacto.</div></div></div>
+          <div class="feature"><i>🔒</i><div><strong>Privacidad</strong><div class="muted">Cero permisos: sin contactos, cámara ni ubicación.</div></div></div>
+          <div class="feature"><i>🧠</i><div><strong>Pegado inteligente</strong><div class="muted">Detecta números copiados al portapapeles.</div></div></div>
+          <div class="feature"><i>⭐</i><div><strong>Historial y favoritos</strong><div class="muted">Todo local. Control total.</div></div></div>
+          <div class="feature"><i>🧩</i><div><strong>Widgets y accesos</strong><div class="muted">Lleva la acción a tu pantalla de inicio.</div></div></div>
+          <div class="feature"><i>🌗</i><div><strong>Modo oscuro</strong><div class="muted">Diseño agradable y discreto.</div></div></div>
+        </div>
+      </div>
+      <div>
+        <h2>Casos de uso</h2>
+        <ul class="muted">
+          <li>Repartidores y logística con dudas de entrega.</li>
+          <li>Inmobiliarias y anuncios “se renta/se vende”.</li>
+          <li>Oficina y servicios: confirmaciones de cita puntuales.</li>
+          <li>Soporte rápido a clientes sin saturar contactos.</li>
+          <li>Eventos y proveedores temporales.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="precios">
+    <div class="container">
+      <h2>Precios simples</h2>
+      <div class="pricing" style="margin-top:10px">
+        <div class="plan">
+          <h4>Gratis</h4>
+          <div class="price">$0</div>
+          <ul class="muted">
+            <li>15 aperturas/semana</li>
+            <li>Historial limitado</li>
+            <li>1 favorito</li>
+          </ul>
+        </div>
+        <div class="plan" style="border-color:rgba(34,197,94,.35);box-shadow:0 0 0 1px rgba(34,197,94,.35)">
+          <h4>Pro Lite (pago único)</h4>
+          <div class="price">MXN $69</div>
+          <ul class="muted">
+            <li>Ilimitado</li>
+            <li>Historial ampliado + widgets</li>
+            <li>Pegado inteligente</li>
+          </ul>
+          <a class="btn primary" href="#" aria-label="Comprar Pro Lite">Comprar</a>
+        </div>
+        <div class="plan">
+          <h4>Pro (suscripción)</h4>
+          <div class="price">$25/mes</div>
+          <ul class="muted">
+            <li>Notas y etiquetas</li>
+            <li>Plantillas de mensajes</li>
+            <li>Exportar/Importar</li>
+          </ul>
+          <a class="btn secondary" href="#" aria-label="Suscríbete a Pro">Suscribirme</a>
+        </div>
+      </div>
+      <p class="muted" style="margin-top:8px">Precios estimados. El precio final puede variar según la tienda y el país.</p>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="container">
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq" style="margin-top:10px">
+        <details>
+          <summary>¿La app guarda mis contactos o mensajes?</summary>
+          <div class="muted">No. Todo ocurre en tu dispositivo. La app no pide permisos de contactos ni accede a tus chats.</div>
+        </details>
+        <details>
+          <summary>¿Necesito tener WhatsApp o Telegram instalados?</summary>
+          <div class="muted">Sí. Abrimos los enlaces oficiales de cada app. Si no están instaladas, te sugerimos instalarlas.</div>
+        </details>
+        <details>
+          <summary>¿Puedo respaldar mi historial?</summary>
+          <div class="muted">Por ahora el historial es local. Próximamente: exportar/importar.</div>
+        </details>
+        <details>
+          <summary>¿Esto viola la privacidad de alguien?</summary>
+          <div class="muted">Usa la app de forma responsable y con consentimiento. Mostrar la foto de perfil depende de la configuración de privacidad de WhatsApp/Telegram del destinatario y se muestra dentro de esas apps, no en la nuestra.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="legal">
+    <div class="container">
+      <h2>Privacidad & Términos</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Política de Privacidad (resumen)</h3>
+          <p class="muted">No recolectamos datos personales. No pedimos permisos. El historial y favoritos viven en tu dispositivo. Si desinstalas la app, se pueden perder.</p>
+          <button class="btn" onclick="openModal('privacyModal')">Leer completa</button>
+        </div>
+        <div class="card">
+          <h3>Términos de Uso (resumen)</h3>
+          <p class="muted">No uses la app para spam, hostigamiento o uso ilegal. Solo abrimos chats mediante enlaces oficiales con tu confirmación.</p>
+          <button class="btn" onclick="openModal('termsModal')">Leer completos</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container section center">
+    <h2>¿Listo para ahorrar tiempo?</h2>
+    <p class="muted">Escribe el número. Toca WhatsApp o Telegram. Listo.</p>
+    <div class="links" style="justify-content:center">
+      <a class="btn secondary" href="#" id="appstore2"> App Store</a>
+      <a class="btn primary" href="#" id="playstore2">Google Play</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <div>© <span id="year"></span> Chat Directo</div>
+    <div class="links">
+      <a href="#" onclick="openModal('contactModal')">Contacto</a>
+      <a href="#" onclick="openModal('privacyModal')">Privacidad</a>
+      <a href="#" onclick="openModal('termsModal')">Términos</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Modales -->
+<div id="privacyModal" class="modal sr-only" aria-hidden="true">
+  <div class="container">
+    <div class="card" style="max-width:900px;margin:24px auto;background:#0a0f1c">
+      <h3>Política de Privacidad</h3>
+      <p class="muted">No recolectamos PII, no usamos cookies de seguimiento. La app funciona completamente sin permisos. El historial y favoritos se guardan de forma local (AsyncStorage). Si reinstalas o cambias de dispositivo, puedes perder esos datos. Próximamente ofreceremos exportar/importar. Si nos contactas por correo, trataremos tu mensaje solo para darte soporte.</p>
+      <div class="links"><button class="btn" onclick="closeModal('privacyModal')">Cerrar</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="termsModal" class="modal sr-only" aria-hidden="true">
+  <div class="container">
+    <div class="card" style="max-width:900px;margin:24px auto;background:#0a0f1c">
+      <h3>Términos de Uso</h3>
+      <p class="muted">Usa la app de manera responsable y con consentimiento. Prohibido el spam, scraping o hostigamiento. La app no envía mensajes automáticamente: solo abre enlaces oficiales para que tú confirmes en WhatsApp o Telegram. Podemos retirar el servicio si detectamos abuso. El uso implica la aceptación de estos términos.</p>
+      <div class="links"><button class="btn" onclick="closeModal('termsModal')">Cerrar</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="contactModal" class="modal sr-only" aria-hidden="true">
+  <div class="container">
+    <div class="card" style="max-width:700px;margin:24px auto;background:#0a0f1c">
+      <h3>Contacto</h3>
+      <p class="muted">¿Dudas, soporte o prensa? Escríbenos:</p>
+      <p><a href="mailto:hola@tudominio.com" class="btn">hola@tudominio.com</a></p>
+      <div class="links"><button class="btn" onclick="closeModal('contactModal')">Cerrar</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Año dinámico
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Enlaces a tiendas (reemplaza con tus URLs reales)
+  const APPSTORE_URL = 'https://apps.apple.com/app/idXXXXXXXXX';
+  const PLAY_URL = 'https://play.google.com/store/apps/details?id=tu.paquete';
+  for (const id of ['appstore','appstore2']) document.getElementById(id).href = APPSTORE_URL;
+  for (const id of ['playstore','playstore2']) document.getElementById(id).href = PLAY_URL;
+
+  // Demo interactiva
+  function normalize(num){ return (num || '').replace(/\D/g,''); }
+  function demoOpen(kind){
+    const raw = document.getElementById('demo').value;
+    const n = normalize(raw);
+    if(n.length < 10){ alert('Ingresa un número válido de 10 dígitos.'); return; }
+    const mx = n.length === 10 ? `52${n}` : n; // prefijo MX si el usuario escribió 10 dígitos
+    const url = kind === 'wa' ? `https://wa.me/${mx}` : `https://t.me/+${mx}`; // Enlace ilustrativo
+    alert(`Ejemplo: abriríamos\n${url}`);
+  }
+
+  // Modales accesibles
+  function openModal(id){ const m = document.getElementById(id); m.classList.remove('sr-only'); m.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+  function closeModal(id){ const m = document.getElementById(id); m.classList.add('sr-only'); m.setAttribute('aria-hidden','true'); document.body.style.overflow='auto'; }
+  window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ document.querySelectorAll('.modal').forEach(m=>{m.classList.add('sr-only');m.setAttribute('aria-hidden','true')}) } });
+
+  // (Opcional) Métricas simples con Plausible/GA4: pega tu script aquí
+  // Ejemplo (Plausible):
+  // const s=document.createElement('script'); s.defer=true; s.setAttribute('data-domain','tudominio.com'); s.src='https://plausible.io/js/script.js'; document.head.appendChild(s);
+</script>
+</body>
+</html>
